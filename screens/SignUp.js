@@ -1,14 +1,144 @@
 import React from "react"
-import { StyleSheet, Text, View } from "react-native"
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native"
+import { connect } from "react-redux"
+import Layout from "../components/Layout"
+import { useSignUp } from "../hooks/userHooks"
+import userActions from "../redux/actions/usersActions"
+import Loading from "./Loading"
 
-const SignUp = () => {
+const SignUp = ({ signUp }) => {
+  const [formik, loading, error] = useSignUp(signUp)
+  if (loading) return <Loading />
   return (
-    <View>
-      <Text></Text>
-    </View>
+    <Layout>
+      <View style={styles.mainContainer}>
+        <TextInput
+          onChangeText={formik.handleChange("firstName")}
+          onBlur={formik.handleBlur("firstName")}
+          value={formik.values.firstName}
+          placeholder="First Name"
+          style={styles.inputText}
+        />
+        {formik.touched.firstName && formik.errors.firstName && (
+          <Text style={styles.errorText}>{formik.errors.firstName}</Text>
+        )}
+        <TextInput
+          onChangeText={formik.handleChange("lastName")}
+          onBlur={formik.handleBlur("lastName")}
+          value={formik.values.lastName}
+          placeholder="Last Name"
+          style={styles.inputText}
+        />
+        {formik.touched.lastName && formik.errors.lastName && (
+          <Text style={styles.errorText}>{formik.errors.lastName}</Text>
+        )}
+        <TextInput
+          onChangeText={formik.handleChange("email")}
+          onBlur={formik.handleBlur("email")}
+          value={formik.values.email}
+          placeholder="Email"
+          style={styles.inputText}
+        />
+        {formik.touched.email && formik.errors.email && (
+          <Text style={styles.errorText}>{formik.errors.email}</Text>
+        )}
+        <TextInput
+          secureTextEntry={true}
+          onChangeText={formik.handleChange("password")}
+          onBlur={formik.handleBlur("password")}
+          value={formik.values.password}
+          placeholder="Password"
+          style={styles.inputText}
+        />
+        {formik.touched.password && formik.errors.password && (
+          <Text style={styles.errorText}>{formik.errors.password}</Text>
+        )}
+        <TextInput
+          secureTextEntry={true}
+          onChangeText={formik.handleChange("confirmPassword")}
+          onBlur={formik.handleBlur("confirmPassword")}
+          value={formik.values.confirmPassword}
+          placeholder="Confirm Password"
+          style={styles.inputText}
+        />
+        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+          <Text style={styles.errorText}>{formik.errors.confirmPassword}</Text>
+        )}
+        <TextInput
+          onChangeText={formik.handleChange("photoURL")}
+          onBlur={formik.handleBlur("photoURL")}
+          value={formik.values.photoURL}
+          placeholder="Photo URL"
+          style={styles.inputText}
+        />
+        {formik.touched.photoURL && formik.errors.photoURL && (
+          <Text style={styles.errorText}>{formik.errors.photoURL}</Text>
+        )}
+        <TextInput
+          onChangeText={formik.handleChange("country")}
+          onBlur={formik.handleBlur("country")}
+          value={formik.values.country}
+          placeholder="Country"
+          style={styles.inputText}
+        />
+        {formik.touched.country && formik.errors.country && (
+          <Text style={styles.errorText}>{formik.errors.country}</Text>
+        )}
+        <TouchableOpacity
+          onPress={formik.handleSubmit}
+          style={{ width: "100%" }}
+        >
+          <View style={styles.signUpButton}>
+            <Text style={{ color: "white" }}>Sign Up</Text>
+          </View>
+        </TouchableOpacity>
+        {error && (
+          <Text style={[styles.errorText, { textAlign: "center" }]}>
+            {error}
+          </Text>
+        )}
+        <Text>Already have an account? Log In</Text>
+      </View>
+    </Layout>
   )
 }
 
-export default SignUp
+const mapDispatchToProps = {
+  signUp: userActions.signUp,
+}
 
-const styles = StyleSheet.create({})
+export default connect(null, mapDispatchToProps)(SignUp)
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "70%",
+  },
+  inputText: {
+    borderColor: "lightgray",
+    borderWidth: 1,
+    width: "100%",
+    borderRadius: 5,
+    padding: 10,
+    margin: 5,
+    fontSize: 20,
+  },
+  errorText: { color: "red", fontSize: 12 },
+  signUpButton: {
+    width: "100%",
+    backgroundColor: "#10B981",
+    paddingVertical: 12,
+    borderRadius: 5,
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+})
