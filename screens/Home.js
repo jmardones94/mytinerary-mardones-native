@@ -11,7 +11,6 @@ import * as MyFont from "expo-font"
 import { useSelector } from "react-redux"
 import { FontAwesome } from "@expo/vector-icons"
 import Loading from "./Loading"
-import Layout from "../components/Layout"
 
 const Home = (props) => {
   const [loaded, error] = MyFont.useFonts({
@@ -19,38 +18,33 @@ const Home = (props) => {
     silt: require("../assets/fonts/ShadowsIntoLightTwo.ttf"),
   })
   const user = useSelector((state) => state.users.user)
-  console.log(user)
   if (error) {
     console.log(error)
   }
   if (!loaded) return <Loading />
   return (
-    <Layout>
-      <View style={styles.mainContainer}>
-        <View style={styles.hero}>
-          <Text style={styles.mytinerary}>MyTinerary</Text>
-          <Image
-            style={styles.image}
-            source={{
-              uri: "https://i.imgur.com/pusiedR.png?1",
-            }}
-          />
-          <Text style={styles.title}>Find your perfect trip</Text>
-          <Text style={styles.subTitle}>
-            designed by insiders who know and love their cities!
-          </Text>
-          <Text style={styles.text}>Your dream travel starts</Text>
-          <TouchableOpacity
-            onPress={() => console.log("CallToAction said Ouch!")}
-          >
-            <View style={styles.callToAction}>
-              <Text style={styles.callToActionText}>HERE</Text>
-              <FontAwesome name="paper-plane" size={16} color="#DC2626" />
-            </View>
-          </TouchableOpacity>
-        </View>
+    <View style={styles.mainContainer}>
+      <View style={styles.hero}>
+        <Text style={styles.mytinerary}>MyTinerary</Text>
+        <Image
+          style={styles.image}
+          source={{
+            uri: "https://i.imgur.com/pusiedR.png?1",
+          }}
+        />
+        <Text style={styles.title}>Find your perfect trip</Text>
+        <Text style={styles.subTitle}>
+          designed by insiders who know and love their cities!
+        </Text>
+        <Text style={styles.text}>Your dream travel starts</Text>
+        <TouchableOpacity onPress={() => props.navigation.navigate("cities")}>
+          <View style={styles.callToAction}>
+            <Text style={styles.callToActionText}>HERE</Text>
+            <FontAwesome name="paper-plane" size={16} color="#DC2626" />
+          </View>
+        </TouchableOpacity>
       </View>
-    </Layout>
+    </View>
   )
 }
 
@@ -62,6 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "white",
   },
   hero: {
     flex: 1,

@@ -8,6 +8,10 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-picker/picker": "^2.1.0",
+    "@react-navigation/drawer": "^6.1.6",
+    "@react-navigation/native": "^6.0.4",
+    "@react-navigation/native-stack": "^6.2.2",
     "axios": "^0.21.4",
     "expo": "~42.0.1",
     "expo-app-loading": "^1.1.2",

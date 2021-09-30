@@ -24,7 +24,6 @@ export const useLogIn = (logIn) => {
       setLoading(true)
       setError(null)
       const res = await logIn(values)
-      setLoading(false)
       if (!res.success) throw new Error(res.error)
     } catch (e) {
       setError(e.message)
@@ -74,7 +73,6 @@ export const useSignUp = (signUp) => {
     try {
       setLoading(true)
       const res = await signUp(values)
-      setLoading(false)
       if (!res.success) throw new Error(res.error)
     } catch (e) {
       setError(e.message)
