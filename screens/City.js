@@ -55,16 +55,6 @@ const City = ({
         <View>
           <Text style={styles.description}>{city.description}</Text>
         </View>
-        {/* Currency */}
-        {/* <View style={{ alignItems: "center" }}> 
-          <Text>
-            <Text style={{ fontWeight: "500", fontSize: 24 }}>Currency: </Text>
-            <Text style={{ fontSize: 24 }}>
-              {city.currencyCode}{" "}
-              <CurrencySymbol symbol={city.currencySymbol} />
-            </Text>
-          </Text>
-        </View> */}
         <View style={{ alignItems: "center", width: "100%" }}>
           {itineraries.filter((itinerary) => itinerary.cityId === city._id)
             .length ? (
@@ -72,6 +62,7 @@ const City = ({
               .filter((itinerary) => itinerary.cityId === city._id)
               .map((itinerary) => (
                 <TouchableOpacity
+                  key={itinerary._id}
                   style={{ width: "100%", alignItems: "center" }}
                   onPress={() =>
                     navigation.navigate("itinerary", {
@@ -79,7 +70,7 @@ const City = ({
                     })
                   }
                 >
-                  <ItineraryCard key={itinerary._id} itinerary={itinerary} />
+                  <ItineraryCard itinerary={itinerary} />
                 </TouchableOpacity>
               ))
           ) : (
@@ -101,7 +92,7 @@ const City = ({
             onPress={() => navigation.navigate("cities")}
           >
             <View style={styles.backToCitiesBtn}>
-              <Text style={styles.backToCitiesBtnText}>Back to Cities</Text>
+              <Text style={styles.backToCitiesBtnText}>BACK TO CITIES</Text>
             </View>
           </TouchableOpacity>
         </View>

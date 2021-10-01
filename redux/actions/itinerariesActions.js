@@ -132,6 +132,7 @@ const itinerariesActions = {
         )
         if (response.data.success) {
           dispatch({ type: "REMOVE_COMMENT", payload: commentId })
+          return { success: true, error: null }
         } else {
           throw new Error(response.data.error)
         }

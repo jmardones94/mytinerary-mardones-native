@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
   loading: {
     fontSize: 32,
     marginTop: 20,
-    fontFamily: "Roboto",
     fontWeight: "600",
   },
 })

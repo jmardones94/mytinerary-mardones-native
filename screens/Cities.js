@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  Image,
   Dimensions,
   ScrollView,
   ImageBackground,
@@ -31,7 +30,7 @@ const Cities = ({ getCities, navigation }) => {
           placeholder="Search a city"
         />
       </View>
-      <ScrollView style={{ marginVertical: 20 }}>
+      <ScrollView style={{ marginVertical: 30 }}>
         {cities
           .filter((city) =>
             city.name
@@ -56,6 +55,18 @@ const Cities = ({ getCities, navigation }) => {
               </View>
             </TouchableOpacity>
           ))}
+        <TouchableOpacity onPress={() => navigation.navigate("home")}>
+          <View style={styles.navigateHome}>
+            <Text
+              style={{
+                textAlign: "center",
+                color: "white",
+              }}
+            >
+              GO TO HOME
+            </Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   )
@@ -110,5 +121,13 @@ const styles = StyleSheet.create({
   cityName: {
     fontSize: 24,
     color: "white",
+  },
+  navigateHome: {
+    paddingVertical: 12,
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#374151",
+    marginBottom: 30,
+    borderRadius: 7,
   },
 })

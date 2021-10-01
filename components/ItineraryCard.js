@@ -24,13 +24,11 @@ const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
     } else {
       res = await addLike(itinerary._id)
     }
-    console.log(res)
     if (!res.success) {
       Alert.alert(`Error: ${res.error}`)
       return false
     } // handle error
   }
-  console.log(itinerary)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.author}>
@@ -46,6 +44,9 @@ const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
             <FontAwesome name="heart-o" size={24} color="red" />
           )}
         </TouchableOpacity>
+        <Text style={{ fontSize: 18, color: "white", marginLeft: 10 }}>
+          {itinerary.likes.length}
+        </Text>
       </View>
       <View style={styles.priceDurationContainer}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -55,7 +56,7 @@ const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
           </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
-          {[1, 2, 3, 4, 5].slice(0, itinerary.price + 1).map((i) => (
+          {[1, 2, 3, 4, 5].slice(0, itinerary.price).map((i) => (
             <MaterialCommunityIcons
               key={`${i}-${itinerary._id}`}
               name="currency-usd-circle-outline"
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginTop: 10,
-    marginHorizontal: 12,
+    marginRight: 12,
     textAlign: "center",
     paddingBottom: 10,
     color: "white",

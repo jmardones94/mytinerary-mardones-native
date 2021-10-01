@@ -11,7 +11,7 @@ import userActions from "../redux/actions/usersActions"
 import { useLogIn } from "../hooks/userHooks"
 import Loading from "./Loading"
 
-const LogIn = ({ logIn }) => {
+const LogIn = ({ logIn, navigation }) => {
   const [formik, loading, error] = useLogIn(logIn)
   if (loading) return <Loading />
   return (
@@ -48,7 +48,15 @@ const LogIn = ({ logIn }) => {
       {error && (
         <Text style={[styles.errorText, { textAlign: "center" }]}>{error}</Text>
       )}
-      <Text>Already have an account? Sign Up</Text>
+      <View style={{ flexDirection: "row" }}>
+        <Text>Don't have an account yet? </Text>
+
+        <TouchableOpacity onPress={() => navigation.navigate("signup")}>
+          <View>
+            <Text style={{ textDecorationLine: "underline" }}>Sign Up</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
