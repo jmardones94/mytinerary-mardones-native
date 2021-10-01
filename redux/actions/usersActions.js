@@ -1,6 +1,7 @@
 import axios from "axios"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const userActions = {
+const usersActions = {
   logIn: (data) => {
     return async (dispatch) => {
       try {
@@ -11,6 +12,11 @@ const userActions = {
         if (!res.data.success) {
           throw new Error(res.data.error)
         }
+        await AsyncStorage.setItem(
+          "token",
+          res.data.response.token,
+          (e) => e && console.log(e)
+        )
         dispatch({ type: "LOG_IN", payload: res.data.response })
         return { success: true, error: null }
       } catch (e) {
@@ -26,6 +32,11 @@ const userActions = {
           data
         )
         if (res.data.success) {
+          await AsyncStorage.setItem(
+            "token",
+            res.data.response.token,
+            (e) => e && console.log(e)
+          )
           // localStorage.setItem("token", res.data.response.token)
           dispatch({
             type: "LOG_IN",
@@ -46,11 +57,36 @@ const userActions = {
       }
     }
   },
+  tokenLogIn: (token) => {
+    return async (dispatch) => {
+      const headers = { Authorization: `Bearer ${token}` }
+      try {
+        const res = await axios.get(
+          "https://mytinerary-mardones.herokuapp.com/api/validate/token",
+          { headers }
+        )
+        if (res.data.success) {
+          dispatch({
+            type: "LOG_IN",
+            payload: { ...res.data.response, token },
+          })
+          return { success: true, error: null }
+        } else {
+          throw new Error(res.data.error.message)
+        }
+      } catch (e) {
+        await AsyncStorage.removeItem("token", (e) => e && console.log(e))
+        dispatch({ type: "LOG_OUT" })
+        return { success: false, error: e.message }
+      }
+    }
+  },
   logOut: () => {
     return async (dispatch) => {
+      await AsyncStorage.removeItem("token", (e) => e && console.log(e))
       dispatch({ type: "LOG_OUT" })
     }
   },
 }
 
-export default userActions
+export default usersActions

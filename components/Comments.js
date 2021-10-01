@@ -7,12 +7,11 @@ import itinerariesActions from "../redux/actions/itinerariesActions"
 import Loading from "../screens/Loading"
 import Comment from "./Comment"
 
-const Comments = ({ itineraryId, comments, getComments }) => {
-  const [loadingComments, errorComments] = useComments(
-    getComments,
-    itineraryId,
-    comments
-  )
+const Comments = ({ itineraryId }) => {
+  const [comments, loadingComments, errorComments] = useComments(itineraryId)
+  if (errorComments) {
+    console.log(errorComments)
+  }
   if (loadingComments) return <Loading />
   return (
     <View style={{ width: "100%" }}>
@@ -51,16 +50,22 @@ export default connect(mapStateToProps, mapDispatchToProps)(Comments)
 const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "bold",
     textAlign: "center",
     textTransform: "uppercase",
     marginTop: 40,
-    marginBottom: 15,
+    marginBottom: 5,
+    fontFamily: "ubuntu_medium",
   },
   commentsContainer: {
     width: "80%",
     alignSelf: "center",
-    height: 250,
+    height: 300,
+    paddingVertical: 20,
   },
-  noCommentsYet: { alignSelf: "center", marginTop: 80, fontSize: 16 },
+  noCommentsYet: {
+    alignSelf: "center",
+    marginTop: 80,
+    fontSize: 16,
+    fontFamily: "ubuntu",
+  },
 })

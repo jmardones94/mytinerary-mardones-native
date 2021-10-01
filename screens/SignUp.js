@@ -15,8 +15,8 @@ import userActions from "../redux/actions/usersActions"
 import Loading from "./Loading"
 import { Picker } from "@react-native-picker/picker"
 
-const SignUp = ({ signUp, navigation }) => {
-  const [formik, loading, error] = useSignUp(signUp)
+const SignUp = ({ navigation }) => {
+  const [formik, loading, error] = useSignUp()
   const countries = useCountries()
   if (loading) return <Loading />
   return (
@@ -89,13 +89,16 @@ const SignUp = ({ signUp, navigation }) => {
           )}
           <View style={styles.pickerCointainer}>
             <Picker
+              prompt="Select a country"
               style={styles.pickerText}
+              itemStyle={{ fontFamily: "ubuntu" }}
               selectedValue={formik.values.country}
               onValueChange={formik.handleChange("country")}
             >
               <Picker.Item color="gray" label="Select a country" value="" />
               {countries.map((country) => (
                 <Picker.Item
+                  color="black"
                   label={country.name}
                   key={country.name}
                   value={country.name}
@@ -111,7 +114,9 @@ const SignUp = ({ signUp, navigation }) => {
             style={{ width: "100%", alignItems: "center" }}
           >
             <View style={styles.signUpButton}>
-              <Text style={{ color: "white" }}>Sign Up</Text>
+              <Text style={{ color: "white", fontFamily: "ubuntu" }}>
+                SIGN UP
+              </Text>
             </View>
           </TouchableOpacity>
           {error && (
@@ -120,11 +125,20 @@ const SignUp = ({ signUp, navigation }) => {
             </Text>
           )}
           <View style={{ flexDirection: "row" }}>
-            <Text>Already have an account? </Text>
+            <Text style={{ fontFamily: "ubuntu" }}>
+              Already have an account?{" "}
+            </Text>
 
             <TouchableOpacity onPress={() => navigation.navigate("login")}>
               <View>
-                <Text style={{ textDecorationLine: "underline" }}>Log In</Text>
+                <Text
+                  style={{
+                    textDecorationLine: "underline",
+                    fontFamily: "ubuntu",
+                  }}
+                >
+                  Log In
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -134,11 +148,7 @@ const SignUp = ({ signUp, navigation }) => {
   )
 }
 
-const mapDispatchToProps = {
-  signUp: userActions.signUp,
-}
-
-export default connect(null, mapDispatchToProps)(SignUp)
+export default SignUp
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -155,6 +165,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     fontSize: 20,
+    fontFamily: "ubuntu",
   },
   pickerCointainer: {
     width: "70%",
@@ -165,11 +176,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   pickerText: { width: "100%" },
-  errorText: { color: "red", fontSize: 12 },
+  errorText: { color: "red", fontSize: 12, fontFamily: "ubuntu" },
   signUpButton: {
     width: "70%",
     backgroundColor: "#10B981",
-    paddingVertical: 12,
+    paddingVertical: 15,
     borderRadius: 5,
     marginVertical: 20,
     alignItems: "center",

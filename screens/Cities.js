@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
 import {
   StyleSheet,
   Text,
@@ -10,13 +10,11 @@ import {
   ImageBackground,
 } from "react-native"
 import { useCities } from "../hooks/citiesHooks"
-import citiesActions from "../redux/actions/citiesActions"
-import { connect } from "react-redux"
 import Loading from "./Loading"
 import { Feather } from "@expo/vector-icons"
 
-const Cities = ({ getCities, navigation }) => {
-  const [cities, loading, error] = useCities(getCities)
+const Cities = ({ navigation }) => {
+  const [cities, loading, error] = useCities()
   const [filterQuery, setFilterQuery] = useState("")
   if (loading) return <Loading />
   return (
@@ -61,6 +59,7 @@ const Cities = ({ getCities, navigation }) => {
               style={{
                 textAlign: "center",
                 color: "white",
+                fontFamily: "ubuntu",
               }}
             >
               GO TO HOME
@@ -72,11 +71,7 @@ const Cities = ({ getCities, navigation }) => {
   )
 }
 
-const mapDispatchToProps = {
-  getCities: citiesActions.getCities,
-}
-
-export default connect(null, mapDispatchToProps)(Cities)
+export default Cities
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -98,6 +93,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 20,
     textAlign: "center",
+    fontFamily: "ubuntu",
   },
   cityContainer: {
     marginBottom: 20,
@@ -121,9 +117,10 @@ const styles = StyleSheet.create({
   cityName: {
     fontSize: 24,
     color: "white",
+    fontFamily: "ubuntu_medium",
   },
   navigateHome: {
-    paddingVertical: 12,
+    paddingVertical: 15,
     width: "100%",
     alignItems: "center",
     backgroundColor: "#374151",

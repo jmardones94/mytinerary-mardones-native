@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
   Alert,
   Image,
@@ -18,51 +18,29 @@ import { connect } from "react-redux"
 import itinerariesActions from "../redux/actions/itinerariesActions"
 import Loading from "./Loading"
 import Comments from "../components/Comments"
-import {
-  useActivities,
-  useComments,
-  useItineraries,
-} from "../hooks/citiesHooks"
+import { useActivities, useItinerary } from "../hooks/citiesHooks"
 
 const Itinerary = ({
   route,
   navigation,
-  itineraries,
   user,
   addLike,
   removeLike,
-  comments,
-  activities,
-  getItineraries,
-  getActivities,
-  getComments,
   addComment,
 }) => {
   const [inputText, setInputText] = useState("")
-  const [itinerary, setItinerary] = useState(
-    itineraries.find((itinerary) => itinerary._id === route.params.id) ?? {}
-  )
-  const [loadingItinerary, errorItinerary] = useItineraries(
-    getItineraries,
-    route.params.id,
-    itineraries
+  const [itinerary, loadingItinerary, errorItinerary] = useItinerary(
+    route.params.itineraryId,
+    route.params.cityId
   )
 
-  const [loadingActivities, errorActivities] = useActivities(
-    getActivities,
-    route.params.id,
-    activities
+  const [activities, loadingActivities, errorActivities] = useActivities(
+    route.params.itineraryId
   )
-
-  useEffect(() => {
-    setItinerary(
-      itineraries.find((itinerary) => itinerary._id === route.params.id)
-    )
-  }, [itineraries])
 
   const addCommentHandler = async () => {
     if (!inputText) return false
-    const res = await addComment(route.params.id, inputText)
+    const res = await addComment(route.params.itineraryId, inputText)
     if (!res.success) return false // manejar error...
     setInputText("")
   }
@@ -74,11 +52,7 @@ const Itinerary = ({
     } // Se debe loguear!
     let res
 
-    if (
-      itineraries
-        .find((itinerary) => itinerary._id === route.params.id)
-        .likes.includes(user._id)
-    ) {
+    if (itinerary.likes.includes(user._id)) {
       res = await removeLike(itinerary._id)
     } else {
       res = await addLike(itinerary._id)
@@ -88,7 +62,6 @@ const Itinerary = ({
       return false
     } // handle error
   }
-
   if (loadingItinerary || loadingActivities) return <Loading />
   return (
     <View style={styles.mainContainer}>
@@ -104,7 +77,7 @@ const Itinerary = ({
           </View>
           <View style={styles.descriptionContainer}>
             <View style={styles.descriptionItem_likes}>
-              <Text style={{ fontSize: 20, color: "black", marginRight: 10 }}>
+              <Text style={styles.descriptionItem_likes_number}>
                 {itinerary.likes.length}
               </Text>
               <TouchableOpacity onPress={toggleLike}>
@@ -127,7 +100,7 @@ const Itinerary = ({
             </View>
             <View style={styles.descriptionItem_duration}>
               <FontAwesome name="clock-o" size={30} color="black" />
-              <Text style={{ color: "black", marginLeft: 5, fontSize: 20 }}>
+              <Text style={styles.descriptionItem_duration_text}>
                 {itinerary.duration} hrs.
               </Text>
             </View>
@@ -138,7 +111,9 @@ const Itinerary = ({
           <View>
             <Text style={styles.sectionTitle}>Activities</Text>
             {activities
-              .filter((activity) => activity.itineraryId === route.params.id)
+              .filter(
+                (activity) => activity.itineraryId === route.params.itineraryId
+              )
               .map((activity) => (
                 <View key={activity._id}>
                   <ImageBackground
@@ -150,7 +125,7 @@ const Itinerary = ({
                 </View>
               ))}
           </View>
-          <Comments itineraryId={route.params.id} />
+          <Comments itineraryId={route.params.itineraryId} />
         </View>
         <View style={styles.addCommentContainer}>
           <TextInput
@@ -173,7 +148,9 @@ const Itinerary = ({
         </View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <View style={styles.goBackButton}>
-            <Text style={{ color: "white" }}>GO BACK</Text>
+            <Text style={{ color: "white", fontFamily: "ubuntu" }}>
+              GO BACK
+            </Text>
           </View>
         </TouchableOpacity>
       </ScrollView>
@@ -184,16 +161,10 @@ const Itinerary = ({
 const mapStateToProps = (state) => {
   return {
     user: state.users.user,
-    itineraries: state.itineraries.itineraries,
-    comments: state.itineraries.comments,
-    activities: state.itineraries.activities,
   }
 }
 
 const mapDispatchToProps = {
-  getItineraries: itinerariesActions.getItineraries,
-  getActivities: itinerariesActions.getActivities,
-  getComments: itinerariesActions.getComments,
   addComment: itinerariesActions.addComment,
   addLike: itinerariesActions.addLike,
   removeLike: itinerariesActions.removeLike,
@@ -206,16 +177,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     textTransform: "uppercase",
-    fontWeight: "600",
     marginTop: 30,
+    fontFamily: "ubuntu_bold",
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "bold",
     textAlign: "center",
     textTransform: "uppercase",
     marginTop: 40,
     marginBottom: 15,
+    fontFamily: "ubuntu_medium",
   },
   author: {
     alignItems: "center",
@@ -223,22 +194,35 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   authorPhoto: { height: 150, width: 150, borderRadius: 75 },
-  authorName: { marginTop: 10, fontWeight: "bold", fontSize: 18 },
+  authorName: { marginTop: 10, fontSize: 18, fontFamily: "ubuntu_medium" },
   descriptionContainer: {
     width: "90%",
     alignItems: "center",
   },
   descriptionItem_likes: { flexDirection: "row", marginVertical: 5 },
+  descriptionItem_likes_number: {
+    fontSize: 20,
+    color: "black",
+    marginRight: 10,
+    fontFamily: "ubuntu",
+  },
   descriptionItem_price: { flexDirection: "row", marginVertical: 5 },
   descriptionItem_duration: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 5,
   },
+  descriptionItem_duration_text: {
+    color: "black",
+    marginLeft: 5,
+    fontSize: 20,
+    fontFamily: "ubuntu",
+  },
   descriptionItem_hashtags: {
-    marginVertical: 5,
+    marginVertical: 7,
     fontSize: 14,
     color: "gray",
+    fontFamily: "ubuntu",
   },
   activityPic: {
     width: (Dimensions.get("window").width * 9) / 10,
@@ -256,6 +240,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
     paddingVertical: 8,
     textTransform: "uppercase",
+    fontFamily: "ubuntu",
   },
 
   addCommentContainer: {
@@ -274,13 +259,14 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     width: "80%",
     marginRight: 5,
+    fontFamily: "ubuntu",
   },
   goBackButton: {
     alignSelf: "center",
     width: "80%",
     backgroundColor: "#374151",
     alignItems: "center",
-    paddingVertical: 12,
+    paddingVertical: 15,
     marginVertical: 15,
     borderRadius: 7,
   },

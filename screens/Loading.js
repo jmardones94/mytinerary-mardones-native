@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     height: (Dimensions.get("screen").width * 5) / 10,
   },
   loading: {
-    fontSize: 32,
+    fontSize: 40,
     marginTop: 20,
-    fontWeight: "600",
+    fontFamily: "silt",
   },
 })

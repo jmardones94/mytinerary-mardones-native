@@ -7,22 +7,24 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native"
-import * as MyFont from "expo-font"
+import AppLoading from "expo-app-loading"
+// import * as MyFont from "expo-font"
 import { useSelector } from "react-redux"
 import { FontAwesome } from "@expo/vector-icons"
 import Loading from "./Loading"
 import { ScrollView } from "react-native-gesture-handler"
+import { useCustomFonts } from "../hooks/utilsHooks"
+import { useCities } from "../hooks/citiesHooks"
+import CitiesCarousel from "../components/CitiesCarousel"
+import { useStorageLogIn } from "../hooks/userHooks"
 
 const Home = (props) => {
-  const [loaded, error] = MyFont.useFonts({
-    lemonTuesday: require("../assets/fonts/LemonTuesday.otf"),
-    silt: require("../assets/fonts/ShadowsIntoLightTwo.ttf"),
-  })
-  const user = useSelector((state) => state.users.user)
+  useStorageLogIn()
+  const [loaded, error] = useCustomFonts()
   if (error) {
     console.log(error)
   }
-  if (!loaded) return <Loading />
+  if (!loaded) return <AppLoading />
   return (
     <View
       style={{
@@ -58,6 +60,31 @@ const Home = (props) => {
             </TouchableOpacity>
           </View>
         </View>
+        <Text
+          style={{
+            width: "100%",
+            fontSize: 30,
+            textAlign: "center",
+            fontFamily: "ubuntu",
+            marginTop: 10,
+            marginBottom: 30,
+          }}
+        >
+          Popular<Text style={{ fontFamily: "silt" }}> MyTineraries</Text>
+        </Text>
+        <CitiesCarousel navigation={props.navigation} />
+        <Text
+          style={{
+            marginTop: 50,
+            backgroundColor: "#111827",
+            color: "white",
+            paddingVertical: 10,
+            fontFamily: "ubuntu",
+            textAlign: "center",
+          }}
+        >
+          Copyright © 2021 by Jonathan Mardones
+        </Text>
       </ScrollView>
     </View>
   )
@@ -69,7 +96,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     width: "100%",
     flex: 1,
-    minHeight: (Dimensions.get("window").height * 9) / 10,
+    minHeight: (Dimensions.get("window").height * 19) / 20,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
@@ -96,8 +123,18 @@ const styles = StyleSheet.create({
     color: "#1E40AF",
     marginTop: 40,
   },
-  subTitle: { color: "#4B5563", marginBottom: 20, fontSize: 14 },
-  text: { color: "#4B5563", marginTop: 15, fontSize: 20 },
+  subTitle: {
+    color: "#4B5563",
+    marginBottom: 20,
+    fontSize: 14,
+    fontFamily: "silt",
+  },
+  text: {
+    color: "#4B5563",
+    marginTop: 15,
+    fontSize: 20,
+    fontFamily: "ubuntu",
+  },
   callToAction: {
     flexDirection: "row",
     alignItems: "center",
@@ -114,5 +151,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginRight: 10,
     fontSize: 20,
+    fontFamily: "ubuntu",
   },
 })

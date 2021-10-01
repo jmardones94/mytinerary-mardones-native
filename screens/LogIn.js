@@ -11,8 +11,8 @@ import userActions from "../redux/actions/usersActions"
 import { useLogIn } from "../hooks/userHooks"
 import Loading from "./Loading"
 
-const LogIn = ({ logIn, navigation }) => {
-  const [formik, loading, error] = useLogIn(logIn)
+const LogIn = ({ navigation }) => {
+  const [formik, loading, error] = useLogIn()
   if (loading) return <Loading />
   return (
     <View style={styles.mainContainer}>
@@ -42,18 +42,24 @@ const LogIn = ({ logIn, navigation }) => {
         style={{ width: "100%", alignItems: "center" }}
       >
         <View style={[styles.logInButton, { marginBottom: error ? 5 : 20 }]}>
-          <Text style={{ color: "white" }}>Log In</Text>
+          <Text style={{ color: "white", fontFamily: "ubuntu" }}>LOG IN</Text>
         </View>
       </TouchableOpacity>
       {error && (
         <Text style={[styles.errorText, { textAlign: "center" }]}>{error}</Text>
       )}
       <View style={{ flexDirection: "row" }}>
-        <Text>Don't have an account yet? </Text>
+        <Text style={{ fontFamily: "ubuntu" }}>
+          Don't have an account yet?{" "}
+        </Text>
 
         <TouchableOpacity onPress={() => navigation.navigate("signup")}>
           <View>
-            <Text style={{ textDecorationLine: "underline" }}>Sign Up</Text>
+            <Text
+              style={{ textDecorationLine: "underline", fontFamily: "ubuntu" }}
+            >
+              Sign Up
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -61,11 +67,7 @@ const LogIn = ({ logIn, navigation }) => {
   )
 }
 
-const mapDispatchToProps = {
-  logIn: userActions.logIn,
-}
-
-export default connect(null, mapDispatchToProps)(LogIn)
+export default LogIn
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -82,12 +84,13 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     fontSize: 20,
+    fontFamily: "ubuntu",
   },
-  errorText: { color: "red", fontSize: 12 },
+  errorText: { color: "red", fontSize: 12, fontFamily: "ubuntu" },
   logInButton: {
     width: "70%",
     backgroundColor: "#10B981",
-    paddingVertical: 12,
+    paddingVertical: 15,
     borderRadius: 5,
     marginVertical: 20,
     alignItems: "center",

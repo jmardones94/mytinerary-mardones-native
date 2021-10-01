@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import citiesActions from "../redux/actions/citiesActions"
+import itinerariesActions from "../redux/actions/itinerariesActions"
 
-export const useCities = (getCities) => {
-  const [cities, setCities] = useState(
-    useSelector((state) => state.cities.cities)
-  )
+export const useCities = () => {
+  const cities = useSelector((state) => state.cities.cities)
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   useEffect(() => {
+    setLoading(true)
+    setError(null)
     if (!cities.length) {
-      getCities()
-        .then((cities) => {
-          setCities(cities.response)
-        })
+      dispatch(citiesActions.getCities())
+        .then((cities) => cities)
         .catch((e) => setError(e.message))
         .finally(() => setLoading(false))
     } else {
@@ -22,46 +23,66 @@ export const useCities = (getCities) => {
   return [cities, loading, error]
 }
 
-export const useCity = (getCities, id) => {
-  const [cities, loading, error] = useCities(getCities)
+export const useCity = (id) => {
+  const [cities, loading, error] = useCities()
   const [city, setCity] = useState(cities.find((city) => city._id === id) ?? {})
   useEffect(() => {
     setCity(cities.find((city) => city._id === id) ?? {})
   }, [cities, id])
+
   return [city, loading, error]
 }
 
-export const useItineraries = (getItineraries, itineraryId, itineraries) => {
+export const useItineraries = (cityId) => {
+  const itineraries = useSelector((state) => state.itineraries.itineraries)
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
   useEffect(() => {
     setLoading(true)
     setError(null)
-    if (!itineraries.find((itinerary) => itinerary._id === itineraryId)) {
-      getItineraries(itineraryId)
-        .then((res) => res)
+    if (
+      !itineraries.filter((itinerary) => itinerary.cityId === cityId).length
+    ) {
+      dispatch(itinerariesActions.getItineraries(cityId))
+        .then((itineraries) => itineraries)
         .catch((e) => setError(e.message))
         .finally(() => setLoading(false))
     } else {
       setLoading(false)
     }
-  }, [itineraryId])
+  }, [cityId])
 
-  return [loading, error]
+  return [itineraries, loading, error]
 }
 
-export const useComments = (getComments, itineraryId, comments) => {
+export const useItinerary = (itineraryId, cityId) => {
+  const [itineraries, loading, error] = useItineraries(cityId)
+  const [itinerary, setItinerary] = useState(
+    itineraries.find((itinerary) => itinerary._id === itineraryId) ?? {}
+  )
+
+  useEffect(() => {
+    setItinerary(
+      itineraries.find((itinerary) => itinerary._id === itineraryId) ?? {}
+    )
+  }, [itineraries])
+
+  return [itinerary, loading, error]
+}
+
+export const useComments = (itineraryId) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
+  const comments = useSelector((state) => state.itineraries.comments)
+  const dispatch = useDispatch()
   useEffect(() => {
     setLoading(true)
     setError(null)
     if (
       !comments.filter((comment) => comment.itineraryId === itineraryId).length
     ) {
-      getComments(itineraryId)
+      dispatch(itinerariesActions.getComments(itineraryId))
         .then((res) => res)
         .catch((e) => setError(e.message))
         .finally(() => setLoading(false))
@@ -70,13 +91,18 @@ export const useComments = (getComments, itineraryId, comments) => {
     }
   }, [itineraryId])
 
-  return [loading, error]
+  return [
+    comments.filter((comment) => comment.itineraryId === itineraryId),
+    loading,
+    error,
+  ]
 }
 
-export const useActivities = (getActivities, itineraryId, activities) => {
+export const useActivities = (itineraryId) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
+  const activities = useSelector((state) => state.itineraries.activities)
+  const dispatch = useDispatch()
   useState(() => {
     setLoading(true)
     setError(null)
@@ -84,7 +110,7 @@ export const useActivities = (getActivities, itineraryId, activities) => {
       !activities.filter((activity) => activity.itineraryId === itineraryId)
         .length
     ) {
-      getActivities(itineraryId)
+      dispatch(itinerariesActions.getActivities(itineraryId))
         .then((res) => res)
         .catch((e) => setError(e.message))
         .finally(() => setLoading(false))
@@ -93,5 +119,5 @@ export const useActivities = (getActivities, itineraryId, activities) => {
     }
   }, [itineraryId])
 
-  return [loading, error]
+  return [activities, loading, error]
 }

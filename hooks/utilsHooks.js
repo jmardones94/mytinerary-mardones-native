@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useFonts } from "expo-font"
 import { useState, useEffect } from "react"
 
 export const useCountries = () => {
@@ -22,4 +23,17 @@ export const useCountries = () => {
   }, [])
 
   return countries
+}
+
+export const useCustomFonts = () => {
+  const [loaded, error] = useFonts({
+    lemonTuesday: require("../assets/fonts/LemonTuesday.otf"),
+    silt: require("../assets/fonts/ShadowsIntoLightTwo.ttf"),
+    ubuntu: require("../assets/fonts/Ubuntu-Regular.ttf"),
+    ubuntu_bold: require("../assets/fonts/Ubuntu-Bold.ttf"),
+    ubuntu_light: require("../assets/fonts/Ubuntu-Light.ttf"),
+    ubuntu_medium: require("../assets/fonts/Ubuntu-Medium.ttf"),
+  })
+
+  return [loaded, error]
 }

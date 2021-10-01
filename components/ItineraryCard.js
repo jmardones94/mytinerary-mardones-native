@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native"
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons"
-import { connect, useSelector } from "react-redux"
+import { connect } from "react-redux"
 import itinerariesActions from "../redux/actions/itinerariesActions"
 
 const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
@@ -33,7 +33,7 @@ const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
     <View style={styles.mainContainer}>
       <View style={styles.author}>
         <Image style={styles.photo} source={{ uri: itinerary.author.photo }} />
-        <Text style={{ color: "white" }}>{itinerary.author.name}</Text>
+        <Text style={styles.authorName}>{itinerary.author.name}</Text>
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{itinerary.title.toUpperCase()}</Text>
@@ -44,14 +44,12 @@ const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
             <FontAwesome name="heart-o" size={24} color="red" />
           )}
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, color: "white", marginLeft: 10 }}>
-          {itinerary.likes.length}
-        </Text>
+        <Text style={styles.likesNumber}>{itinerary.likes.length}</Text>
       </View>
       <View style={styles.priceDurationContainer}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <FontAwesome name="clock-o" size={24} color="white" />
-          <Text style={{ color: "white", marginLeft: 5 }}>
+          <Text style={{ color: "white", marginLeft: 5, fontFamily: "ubuntu" }}>
             {itinerary.duration} hrs.
           </Text>
         </View>
@@ -68,10 +66,7 @@ const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
       </View>
       <View style={{ flexDirection: "row", paddingBottom: 15 }}>
         {itinerary.hashtags.map((h) => (
-          <Text
-            style={{ color: "white", fontSize: 12, marginHorizontal: 5 }}
-            key={`${h}${itinerary._id}`}
-          >
+          <Text style={styles.hashtags} key={`${h}${itinerary._id}`}>
             #{h}
           </Text>
         ))}
@@ -105,7 +100,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-
+  authorName: { color: "white", fontFamily: "ubuntu" },
   photo: {
     width: 150,
     height: 150,
@@ -126,12 +121,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingBottom: 10,
     color: "white",
-    fontWeight: "700",
+    // fontWeight: "700",
+    fontFamily: "ubuntu_bold",
   },
   priceDurationContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     width: "70%",
     paddingVertical: 10,
+  },
+  likesNumber: {
+    fontSize: 20,
+    color: "white",
+    marginLeft: 7,
+    fontFamily: "ubuntu_medium",
+  },
+  hashtags: {
+    color: "white",
+    fontSize: 12,
+    marginHorizontal: 5,
+    fontFamily: "ubuntu",
   },
 })

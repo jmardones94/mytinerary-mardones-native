@@ -54,15 +54,7 @@ const Comment = ({ comment, user, removeComment, editComment }) => {
         />
         <Text style={styles.commentAuthorName}>
           {comment.userId.firstName} {comment.userId.lastName}{" "}
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "normal",
-              color: "gray",
-            }}
-          >
-            said:
-          </Text>
+          <Text style={styles.said}>said:</Text>
         </Text>
       </View>
       <View style={styles.commentContentContainer}>
@@ -90,20 +82,24 @@ const Comment = ({ comment, user, removeComment, editComment }) => {
               <TouchableOpacity
                 style={[
                   styles.editButton,
-                  { backgroundColor: "gray", marginRight: 5 },
+                  { backgroundColor: "gray", marginRight: 7 },
                 ]}
                 onPress={() => setIsEditing(false)}
               >
-                <Text style={{ color: "white" }}>Cancel</Text>
+                <Text style={{ color: "white", fontFamily: "ubuntu" }}>
+                  Cancel
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
                   styles.editButton,
-                  { backgroundColor: "#FBBF24", marginLeft: 3 },
+                  { backgroundColor: "#FBBF24", marginLeft: 5 },
                 ]}
                 onPress={editCommentHandler}
               >
-                <Text style={{ color: "white" }}>Update</Text>
+                <Text style={{ color: "white", fontFamily: "ubuntu" }}>
+                  Update
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -146,17 +142,26 @@ export default connect(mapStateToProps, mapDispatchToProps)(Comment)
 const styles = StyleSheet.create({
   commentAuthorContainer: { flexDirection: "row", alignItems: "center" },
   commentAuthorPhoto: { width: 40, height: 40, borderRadius: 20 },
-  commentAuthorName: { fontSize: 18, fontWeight: "700", marginLeft: 5 },
+  commentAuthorName: {
+    fontSize: 18,
+    marginLeft: 5,
+    fontFamily: "ubuntu_bold",
+  },
+  said: {
+    fontSize: 16,
+    color: "gray",
+    fontFamily: "ubuntu",
+  },
   commentContentContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
   },
   editButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 4,
   },
-  commentContent: { paddingLeft: 40, fontSize: 16 },
+  commentContent: { paddingLeft: 40, fontSize: 16, fontFamily: "ubuntu" },
   commentButtonsContainer: { flexDirection: "row", alignItems: "center" },
 })

@@ -7,6 +7,8 @@ import LogOut from "../screens/LogOut"
 import { createDrawerNavigator } from "@react-navigation/drawer"
 import CitiesNavStack from "./CitiesNavStack"
 import { FontAwesome, AntDesign, Entypo } from "@expo/vector-icons"
+import Loading from "../screens/Loading"
+import CitiesCarousel from "../components/CitiesCarousel"
 
 const Drawer = createDrawerNavigator()
 

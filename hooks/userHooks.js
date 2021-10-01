@@ -1,10 +1,14 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useFormik } from "formik"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import * as Yup from "yup"
+import usersActions from "../redux/actions/usersActions"
 
-export const useLogIn = (logIn) => {
+export const useLogIn = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const dispatch = useDispatch()
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     onSubmit: (values) => loginHandler(values),
@@ -23,7 +27,7 @@ export const useLogIn = (logIn) => {
     try {
       setLoading(true)
       setError(null)
-      const res = await logIn(values)
+      const res = await dispatch(usersActions.logIn(values))
       if (!res.success) throw new Error(res.error)
     } catch (e) {
       setError(e.message)
@@ -32,9 +36,10 @@ export const useLogIn = (logIn) => {
   return [formik, loading, error]
 }
 
-export const useSignUp = (signUp) => {
+export const useSignUp = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const dispatch = useDispatch()
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -72,11 +77,34 @@ export const useSignUp = (signUp) => {
   const submitHandler = async (values) => {
     try {
       setLoading(true)
-      const res = await signUp(values)
+      const res = await dispatch(usersActions.signUp(values))
       if (!res.success) throw new Error(res.error)
     } catch (e) {
       setError(e.message)
     }
   }
   return [formik, loading, error]
+}
+
+export const useStorageLogIn = () => {
+  const dispatch = useDispatch()
+  const [error, setError] = useState(null)
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem(
+      "token",
+      (e) => e && console.log(e)
+    )
+    if (token) {
+      const res = await dispatch(usersActions.tokenLogIn(token))
+      if (!res.success) {
+        setError(res.error)
+      }
+    }
+    return token
+  }
+  useEffect(() => {
+    getToken()
+  }, [])
+
+  return error
 }
