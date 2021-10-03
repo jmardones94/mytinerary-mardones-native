@@ -6,7 +6,7 @@ const LogOut = () => {
   const user = useSelector((state) => state.users.user)
   const dispatch = useDispatch()
   useEffect(() => {
-    setTimeout(() => dispatch(userActions.logOut()), 1500)
+    setTimeout(() => dispatch(userActions.logOut()), 1000)
   }, [])
   return (
     <View style={styles.mainContainer}>

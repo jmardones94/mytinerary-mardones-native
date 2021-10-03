@@ -87,6 +87,12 @@ const Itinerary = ({
                   <FontAwesome name="heart-o" size={30} color="red" />
                 )}
               </TouchableOpacity>
+              <View style={styles.descriptionItem_duration}>
+                <Text style={styles.descriptionItem_duration_text}>
+                  {itinerary.duration} hrs.
+                </Text>
+                <FontAwesome name="clock-o" size={32} color="black" />
+              </View>
             </View>
             <View style={styles.descriptionItem_price}>
               {[1, 2, 3, 4, 5].slice(0, itinerary.price).map((i) => (
@@ -97,12 +103,6 @@ const Itinerary = ({
                   color="green"
                 />
               ))}
-            </View>
-            <View style={styles.descriptionItem_duration}>
-              <FontAwesome name="clock-o" size={30} color="black" />
-              <Text style={styles.descriptionItem_duration_text}>
-                {itinerary.duration} hrs.
-              </Text>
             </View>
             <Text style={styles.descriptionItem_hashtags}>
               {itinerary.hashtags.reduce((a, b) => a + " #" + b, "").slice(1)}
@@ -146,7 +146,14 @@ const Itinerary = ({
             </View>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("citiesnav", {
+              screen: "city",
+              params: { id: itinerary.cityId },
+            })
+          }
+        >
           <View style={styles.goBackButton}>
             <Text style={{ color: "white", fontFamily: "ubuntu" }}>
               GO BACK
@@ -203,7 +210,7 @@ const styles = StyleSheet.create({
   descriptionItem_likes_number: {
     fontSize: 20,
     color: "black",
-    marginRight: 10,
+    marginRight: 8,
     fontFamily: "ubuntu",
   },
   descriptionItem_price: { flexDirection: "row", marginVertical: 5 },
@@ -214,9 +221,10 @@ const styles = StyleSheet.create({
   },
   descriptionItem_duration_text: {
     color: "black",
-    marginLeft: 5,
+    marginLeft: 20,
     fontSize: 20,
     fontFamily: "ubuntu",
+    marginRight: 5,
   },
   descriptionItem_hashtags: {
     marginVertical: 7,

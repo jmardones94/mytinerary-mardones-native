@@ -87,6 +87,27 @@ const usersActions = {
       dispatch({ type: "LOG_OUT" })
     }
   },
+  getFavorites: () => {
+    return async (dispatch, getState) => {
+      try {
+        const token = await AsyncStorage.getItem(
+          "token",
+          (e) => e && console.log(e)
+        )
+        const res = await axios.get(
+          "https://mytinerary-mardones.herokuapp.com/api/itineraries/user",
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        if (res.data.success) {
+          return { success: true, response: res.data.response, error: null }
+        } else {
+          throw new Error(res.data.error)
+        }
+      } catch (e) {
+        return { success: false, response: [], error: e.message }
+      }
+    }
+  },
 }
 
 export default usersActions

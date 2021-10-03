@@ -37,7 +37,7 @@ const ItineraryCard = ({ itinerary, addLike, removeLike, user }) => {
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{itinerary.title.toUpperCase()}</Text>
-        <TouchableOpacity onPress={toggleLike}>
+        <TouchableOpacity activeOpacity={0.7} onPress={toggleLike}>
           {itinerary.likes.includes(user?._id) ? (
             <FontAwesome name="heart" size={24} color="red" />
           ) : (

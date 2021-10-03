@@ -45,6 +45,7 @@ const City = ({ route, navigation }) => {
                 <TouchableOpacity
                   key={itinerary._id}
                   style={{ width: "100%", alignItems: "center" }}
+                  activeOpacity={0.7}
                   onPress={() =>
                     navigation.navigate("itinerary", {
                       itineraryId: itinerary._id,

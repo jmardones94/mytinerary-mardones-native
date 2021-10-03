@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useFormik } from "formik"
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import * as Yup from "yup"
 import usersActions from "../redux/actions/usersActions"
 
@@ -107,4 +107,23 @@ export const useStorageLogIn = () => {
   }, [])
 
   return error
+}
+
+export const useFavorites = () => {
+  const dispatch = useDispatch()
+  const itineraries = useSelector((state) => state.itineraries.itineraries)
+  const [favorites, setFavorites] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    dispatch(usersActions.getFavorites())
+      .then((res) => setFavorites(res.response))
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [itineraries])
+
+  return [favorites, loading, error]
 }

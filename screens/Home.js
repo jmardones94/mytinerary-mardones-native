@@ -8,13 +8,9 @@ import {
   Dimensions,
 } from "react-native"
 import AppLoading from "expo-app-loading"
-// import * as MyFont from "expo-font"
-import { useSelector } from "react-redux"
 import { FontAwesome } from "@expo/vector-icons"
-import Loading from "./Loading"
 import { ScrollView } from "react-native-gesture-handler"
 import { useCustomFonts } from "../hooks/utilsHooks"
-import { useCities } from "../hooks/citiesHooks"
 import CitiesCarousel from "../components/CitiesCarousel"
 import { useStorageLogIn } from "../hooks/userHooks"
 
@@ -76,11 +72,12 @@ const Home = (props) => {
         <Text
           style={{
             marginTop: 50,
-            backgroundColor: "#111827",
-            color: "white",
-            paddingVertical: 10,
-            fontFamily: "ubuntu",
+            backgroundColor: "white",
+            color: "black",
+            paddingVertical: 16,
+            fontFamily: "ubuntu_medium",
             textAlign: "center",
+            fontSize: 16,
           }}
         >
           Copyright © 2021 by Jonathan Mardones

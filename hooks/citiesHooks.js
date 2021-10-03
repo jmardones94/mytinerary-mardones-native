@@ -66,7 +66,7 @@ export const useItinerary = (itineraryId, cityId) => {
     setItinerary(
       itineraries.find((itinerary) => itinerary._id === itineraryId) ?? {}
     )
-  }, [itineraries])
+  }, [itineraries, itineraryId, cityId])
 
   return [itinerary, loading, error]
 }
@@ -103,13 +103,15 @@ export const useActivities = (itineraryId) => {
   const [error, setError] = useState(null)
   const activities = useSelector((state) => state.itineraries.activities)
   const dispatch = useDispatch()
-  useState(() => {
+  useEffect(() => {
     setLoading(true)
     setError(null)
+    console.log()
     if (
       !activities.filter((activity) => activity.itineraryId === itineraryId)
         .length
     ) {
+      console.log("Estoy cargando nuevas activities")
       dispatch(itinerariesActions.getActivities(itineraryId))
         .then((res) => res)
         .catch((e) => setError(e.message))
@@ -118,6 +120,5 @@ export const useActivities = (itineraryId) => {
       setLoading(false)
     }
   }, [itineraryId])
-
   return [activities, loading, error]
 }

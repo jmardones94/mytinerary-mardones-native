@@ -39,6 +39,7 @@ const Cities = ({ navigation }) => {
           .map((city) => (
             <TouchableOpacity
               key={city._id}
+              activeOpacity={0.5}
               onPress={() => navigation.navigate("city", { id: city._id })}
             >
               <View style={styles.cityContainer}>
