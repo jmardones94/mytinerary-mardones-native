@@ -206,7 +206,11 @@ const styles = StyleSheet.create({
     width: "90%",
     alignItems: "center",
   },
-  descriptionItem_likes: { flexDirection: "row", marginVertical: 5 },
+  descriptionItem_likes: {
+    flexDirection: "row",
+    marginVertical: 5,
+    alignItems: "center",
+  },
   descriptionItem_likes_number: {
     fontSize: 20,
     color: "black",
@@ -218,6 +222,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 5,
+    alignItems: "center",
   },
   descriptionItem_duration_text: {
     color: "black",

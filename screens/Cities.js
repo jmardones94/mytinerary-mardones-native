@@ -28,32 +28,50 @@ const Cities = ({ navigation }) => {
           placeholder="Search a city"
         />
       </View>
-      <ScrollView style={{ marginVertical: 30 }}>
-        {cities
-          .filter((city) =>
-            city.name
-              .trim()
-              .toLocaleLowerCase()
-              .startsWith(filterQuery.trim().toLocaleLowerCase())
-          )
-          .map((city) => (
-            <TouchableOpacity
-              key={city._id}
-              activeOpacity={0.5}
-              onPress={() => navigation.navigate("city", { id: city._id })}
-            >
-              <View style={styles.cityContainer}>
-                <ImageBackground
-                  style={styles.cityImage}
-                  source={{ uri: city.src }}
-                >
-                  <View style={styles.innerImage}>
-                    <Text style={styles.cityName}>{city.name}</Text>
-                  </View>
-                </ImageBackground>
-              </View>
-            </TouchableOpacity>
-          ))}
+      <ScrollView style={{ marginVertical: 30, flex: 1 }}>
+        {cities.filter((city) =>
+          city.name
+            .trim()
+            .toLocaleLowerCase()
+            .startsWith(filterQuery.trim().toLocaleLowerCase())
+        ).length ? (
+          cities
+            .filter((city) =>
+              city.name
+                .trim()
+                .toLocaleLowerCase()
+                .startsWith(filterQuery.trim().toLocaleLowerCase())
+            )
+            .map((city) => (
+              <TouchableOpacity
+                key={city._id}
+                activeOpacity={0.5}
+                onPress={() => navigation.navigate("city", { id: city._id })}
+              >
+                <View style={styles.cityContainer}>
+                  <ImageBackground
+                    style={styles.cityImage}
+                    source={{ uri: city.src }}
+                  >
+                    <View style={styles.innerImage}>
+                      <Text style={styles.cityName}>{city.name}</Text>
+                    </View>
+                  </ImageBackground>
+                </View>
+              </TouchableOpacity>
+            ))
+        ) : (
+          <View
+            style={{
+              minHeight: Dimensions.get("screen").height * 0.55,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ fontFamily: "ubuntu", fontSize: 18 }}>
+              No cities matching "{filterQuery.trim()}"
+            </Text>
+          </View>
+        )}
         <TouchableOpacity onPress={() => navigation.navigate("home")}>
           <View style={styles.navigateHome}>
             <Text
@@ -79,6 +97,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    flex: 1,
   },
   searchContainer: {
     flexDirection: "row",
